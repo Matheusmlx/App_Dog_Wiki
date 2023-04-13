@@ -1,0 +1,35 @@
+name: dog_wiki
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=2.19.2 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  fonts:
+    - family: Holtwood One SC,
+      fonts:
+        - asset: fonts/holtwood_one_sc.ttf
+  assets:
+    - lib/assets/cao_home.png
+    - lib/assets/dog_00.png
+    - lib/assets/dog_01.png
+    - lib/assets/dog_02.png
+    - lib/assets/dog_03.png
+    - lib/assets/dog_04.png
+    - lib/assets/dog_05.png
+    - lib/assets/dog_06.png
+    - lib/assets/dog_07.png
+    - lib/assets/dog_08.png
+  uses-material-design: true
