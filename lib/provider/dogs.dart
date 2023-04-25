@@ -9,7 +9,29 @@ class Dogs with ChangeNotifier {
     return [..._items.values];
   }
 
+  int get size {
+    return _items.length;
+  }
+
   Dog byIndex(int i) {
     return _items.values.elementAt(i);
+  }
+
+  put(Dog? dog) {
+    if (dog == null) {
+      return;
+    }
+
+    if (dog.id != null && dog.id!.isNotEmpty && _items.containsKey(dog.id)) {
+      _items.update(dog.id!, (_) => dog);
+    } else {
+      final id = (_items.length).toString();
+      _items.putIfAbsent(
+          id,
+          () => Dog(
+              id: id, name: dog.name, description: dog.description, photo: ""));
+    }
+
+    notifyListeners();
   }
 }
