@@ -25,11 +25,16 @@ class Dogs with ChangeNotifier {
     if (dog.id != null && dog.id!.isNotEmpty && _items.containsKey(dog.id)) {
       _items.update(dog.id!, (_) => dog);
     } else {
+      print("Novas caracteristicas ${dog.caracteristicas}");
       final id = (_items.length).toString();
       _items.putIfAbsent(
           id,
           () => Dog(
-              id: id, name: dog.name, description: dog.description, photo: ""));
+              id: id,
+              name: dog.name,
+              description: dog.description,
+              photo: "",
+              caracteristicas: dog.caracteristicas));
     }
 
     notifyListeners();

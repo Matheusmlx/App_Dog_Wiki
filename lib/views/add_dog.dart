@@ -11,17 +11,13 @@ class IconDataActive {
   final bool? active;
 
   IconDataActive({this.id, this.icon, this.active});
-
-  IconDataActive copyWith({IconData? icon, bool? active}) {
-    return IconDataActive(icon: this.icon, active: this.active);
-  }
 }
 
 class AddDog extends StatefulWidget {
   AddDog({super.key});
 
   final _form = GlobalKey<FormState>();
-  var dogItem = const Dog();
+  var dogItem = const Dog(caracteristicas: []);
 
   @override
   State<AddDog> createState() => AddDogState();
@@ -29,6 +25,7 @@ class AddDog extends StatefulWidget {
 
 class AddDogState extends State<AddDog> {
   String valueAdd = "";
+
   List<IconDataActive> newAttributes = <IconDataActive>[
     IconDataActive(id: 0, icon: Icons.pets, active: false),
     IconDataActive(id: 1, icon: Icons.school, active: false),
@@ -49,26 +46,6 @@ class AddDogState extends State<AddDog> {
       newAttributes[iconDataActive.id!] = iconDataActive;
     });
   }
-
-  // void addNewAttributes(IconDataActive newIconAdd) {
-  //   IconDataActive? newDataActive = newAttributes.firstWhere(
-  //     (element) => element!.id == newIconAdd.id,
-  //     orElse: () {
-  //       newAttributes.add(IconDataActive(
-  //           id: newIconAdd.id, icon: newIconAdd.icon, active: true));
-  //       return null;
-  //     },
-  //   );
-
-  //   if (newDataActive != null) {
-  //     int newDataActiveIndex = newAttributes.indexOf(newDataActive);
-
-  //     newAttributes[newDataActiveIndex] = IconDataActive(
-  //         id: newDataActiveIndex, icon: newDataActive.icon, active: false);
-  //   }
-
-  //   print(newAttributes[0]!.active);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -137,6 +114,13 @@ class AddDogState extends State<AddDog> {
                                 title: "Descrição",
                                 maxLength: 200,
                                 maxLines: 4,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Campo Obrigátorio";
+                                  }
+
+                                  return null;
+                                },
                               ),
                               Container(
                                 margin: const EdgeInsets.only(bottom: 12),
@@ -177,6 +161,14 @@ class AddDogState extends State<AddDog> {
                                         backgroundColor: const Color.fromARGB(
                                             255, 60, 220, 124)),
                                     onPressed: () async {
+                                      List<IconData> listNewItens = newAttributes
+                                              .where((element) => element.active == true)
+                                              .map((data) => data.icon!)
+                                              .toList();
+
+                                      widget.dogItem = widget.dogItem.copyWith(caracteristicas: listNewItens);
+
+                                      print("Caracteristicas ${widget.dogItem.caracteristicas}");
                                       if (widget._form.currentState!
                                           .validate()) {
                                         widget._form.currentState!.save();
@@ -185,8 +177,8 @@ class AddDogState extends State<AddDog> {
                                             .put(Dog(
                                                 id: null,
                                                 name: widget.dogItem.name,
-                                                description:
-                                                    widget.dogItem.description,
+                                                description: widget.dogItem.description,
+                                                caracteristicas: widget.dogItem.caracteristicas,
                                                 photo: widget.dogItem.photo));
                                         Navigator.of(context).pop();
                                       }
