@@ -99,10 +99,9 @@ class DogList extends StatelessWidget {
                                       AppRoutes.DOG_ITEM,
                                       arguments: dogs.byIndex(index));
                                 },
-                                child: CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(dogs.byIndex(index).photo),
-                                  //fit: BoxFit.cover,
+                                child: Image.network(
+                                  dogs.byIndex(index).photo,
+                                  height: MediaQuery.of(context).size.height,
                                 ),
                               )),
                             ),

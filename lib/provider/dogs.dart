@@ -24,7 +24,6 @@ class Dogs with ChangeNotifier {
     if (dog.id != null && dog.id!.isNotEmpty && _items.containsKey(dog.id)) {
       _items.update(dog.id!, (_) => dog);
     } else {
-      print("DATA ${dog.photo}");
       final id = (_items.length).toString();
       _items.putIfAbsent(
           id,
@@ -39,16 +38,12 @@ class Dogs with ChangeNotifier {
     notifyListeners();
   }
 
-  bool deleteDog(String idDog) {
+  deleteDog(String idDog) async {
     Dog findDog = _items.values.firstWhere((element) => element.id == idDog);
 
     if (findDog.id != null) {
       _items.removeWhere((key, value) => value.id == findDog.id);
       notifyListeners();
-
-      return true;
     }
-
-    return false;
   }
 }

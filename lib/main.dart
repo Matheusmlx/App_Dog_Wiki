@@ -4,6 +4,7 @@ import 'package:dog_wiki/views/add_dog.dart';
 import 'package:dog_wiki/views/dogList.dart';
 import 'package:dog_wiki/views/dog_item.dart';
 import 'package:dog_wiki/views/homePage.dart';
+import 'package:dog_wiki/views/photo_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +28,8 @@ class MainApp extends StatelessWidget {
             AppRoutes.HOME: (_) => const HomePage(),
             AppRoutes.DOG_LIST: (_) => const DogList(),
             AppRoutes.DOG_ITEM: (_) => Dog_Item(),
-            AppRoutes.DOG_ADD: (_) => AddDog()
+            AppRoutes.DOG_ADD: (_) => AddDog(),
+            AppRoutes.PHOTO_PREVIEW: (_) => PhotoPreview()
           }),
     );
   }

@@ -72,12 +72,40 @@ class Dog_Item extends StatelessWidget {
                               height: 10,
                             ),
                             GestureDetector(
-                              onTap: () => {
-                                Provider.of<Dogs>(context, listen: false)
-                                    .deleteDog(_formData["id"].toString()),
-                                Navigator.of(context)
-                                    .pushNamed(AppRoutes.DOG_LIST)
-                              },
+                              onTap: () => showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                        backgroundColor:
+                                            Colors.white.withOpacity(0.8),
+                                        title: const Text(
+                                          "Deseja realmente exlcuir ?",
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(
+                                                    context, 'Cancel');
+                                              },
+                                              child: const Text(
+                                                "Não",
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              )),
+                                          TextButton(
+                                              onPressed: () async {
+                                                Provider.of<Dogs>(context,
+                                                        listen: false)
+                                                    .deleteDog(_formData["id"]
+                                                        .toString());
+                                                Navigator.of(context).pushNamed(
+                                                    AppRoutes.DOG_LIST);
+                                              },
+                                              child: const Text("Sim",
+                                                  style: TextStyle(
+                                                      color: Colors.green))),
+                                        ],
+                                      )),
                               child: Icon(
                                 Icons.delete,
                                 color: Colors.red[300],
@@ -87,15 +115,13 @@ class Dog_Item extends StatelessWidget {
                         )
                       ],
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 275,
                       width: 300,
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.safety_check,
-                          size: 200,
-                        ),
+                        backgroundImage:
+                            NetworkImage(_formData['photo'].toString()),
                       ),
                     ),
                     Card(

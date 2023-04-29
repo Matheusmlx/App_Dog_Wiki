@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:camera_camera/camera_camera.dart';
+import 'package:dog_wiki/views/photo_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +25,7 @@ class AddDogState extends State<AddDog> {
   String valueAdd = "";
   bool isLoading = true;
   String? itemId;
+  File? arquivo;
 
   List<DescriptionsDog> newAttributes = <DescriptionsDog>[
     DescriptionsDog(
@@ -84,6 +89,19 @@ class AddDogState extends State<AddDog> {
     setState(() {
       newAttributes[descriptionsDog.id!] = descriptionsDog;
     });
+  }
+
+  void showPreview(BuildContext context, File file) async {
+    file = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PhotoPreview(file: file)),
+    );
+
+    if (file != null) {
+      setState(() => arquivo = file);
+
+      Navigator.pop(context);
+    }
   }
 
   void isEditing() {
@@ -164,6 +182,63 @@ class AddDogState extends State<AddDog> {
                                   return null;
                                 },
                               ),
+                              Container(
+                                alignment: AlignmentDirectional.bottomStart,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 20),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        ElevatedButton.icon(
+                                            onPressed: () => {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          CameraCamera(
+                                                        onFile: (file) =>
+                                                            showPreview(
+                                                                context, file),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                },
+                                            icon:
+                                                const Icon(Icons.photo_camera),
+                                            label: const Text("Tire uma foto")),
+                                        const Text(
+                                          "Ou",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        OutlinedButton.icon(
+                                            onPressed: () {},
+                                            icon: const Icon(Icons.photo,
+                                                color: Colors.white),
+                                            label: const Text(
+                                              "Escolha um arquivo",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ))
+                                      ]),
+                                ),
+                              ),
+                              // CustomTextField(
+                              //   onSaved: (text) => widget.dogItem =
+                              //       widget.dogItem.copyWith(photo: text),
+                              //   title: "Foto",
+                              //   initialValue: widget.dogItem.photo,
+                              //   maxLength: 240,
+                              //   validator: (value) {
+                              //     if (value == null || value.isEmpty) {
+                              //       return "Campo Obrigátorio";
+                              //     }
+
+                              //     return null;
+                              //   },
+                              // ),
                               CustomTextField(
                                 onSaved: (text) => widget.dogItem =
                                     widget.dogItem.copyWith(description: text),
@@ -304,6 +379,19 @@ class CheckboxListTileCustom extends StatelessWidget {
       margin: const EdgeInsets.only(right: 5),
       child: GestureDetector(
         onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.blue[600],
+              content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[Text("${dataActive.description}")]),
+              duration: const Duration(milliseconds: 1000),
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+          );
           setNewAttributes(DescriptionsDog(
               id: dataActive.id,
               icon: dataActive.icon,
