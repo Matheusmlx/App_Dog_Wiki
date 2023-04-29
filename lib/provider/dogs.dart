@@ -21,11 +21,10 @@ class Dogs with ChangeNotifier {
     if (dog == null) {
       return;
     }
-
     if (dog.id != null && dog.id!.isNotEmpty && _items.containsKey(dog.id)) {
       _items.update(dog.id!, (_) => dog);
     } else {
-      print("Novas caracteristicas ${dog.caracteristicas}");
+      print("DATA ${dog.photo}");
       final id = (_items.length).toString();
       _items.putIfAbsent(
           id,
@@ -33,10 +32,23 @@ class Dogs with ChangeNotifier {
               id: id,
               name: dog.name,
               description: dog.description,
-              photo: "",
+              photo: dog.photo,
               caracteristicas: dog.caracteristicas));
     }
 
     notifyListeners();
+  }
+
+  bool deleteDog(String idDog) {
+    Dog findDog = _items.values.firstWhere((element) => element.id == idDog);
+
+    if (findDog.id != null) {
+      _items.removeWhere((key, value) => value.id == findDog.id);
+      notifyListeners();
+
+      return true;
+    }
+
+    return false;
   }
 }

@@ -6,6 +6,7 @@ class CustomTextField extends StatefulWidget {
   final void Function(String? text)? onSaved;
   final int? maxLength;
   final int? maxLines;
+  final String? initialValue;
 
   const CustomTextField(
       {Key? key,
@@ -13,7 +14,8 @@ class CustomTextField extends StatefulWidget {
       this.validator,
       this.onSaved,
       this.maxLength,
-      this.maxLines})
+      this.maxLines,
+      this.initialValue})
       : super(key: key);
 
   @override
@@ -40,9 +42,10 @@ class CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: myController,
+      controller: widget.initialValue != null ? null : myController,
       maxLength: widget.maxLength ?? 20,
       maxLines: widget.maxLines ?? 1,
+      initialValue: widget.initialValue,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: widget.validator,
       onSaved: widget.onSaved,

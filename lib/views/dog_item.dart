@@ -1,21 +1,25 @@
 import 'package:dog_wiki/models/dog.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../components/dog_item_attr.dart';
+import '../models/DescriptionsDog.dart';
+import '../provider/dogs.dart';
+import '../routes/app_routes.dart';
 
 class Dog_Item extends StatelessWidget {
   final Map<String, String> _formData = {};
+  final List<DescriptionsDog?> inconsData = [];
 
   Dog_Item({super.key});
 
   void _loadDogs(Object? dogs) {
     if (dogs != null && dogs is Dog) {
-      print("Dogs ${dogs.caracteristicas}");
-
       _formData['id'] = dogs.id!;
       _formData['name'] = dogs.name;
       _formData['description'] = dogs.description;
-      //_formData['photo'] = dogs.photo;
+      _formData['photo'] = dogs.photo;
+      inconsData.addAll(dogs.caracteristicas);
     }
   }
 
@@ -51,16 +55,47 @@ class Dog_Item extends StatelessWidget {
                                 color: Color.fromARGB(255, 255, 255, 255),
                                 fontFamily: 'Holtwood One SC',
                                 fontWeight: FontWeight.bold)),
-                        const Text('')
+                        Column(
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () => {
+                                Navigator.of(context).pushNamed(
+                                    AppRoutes.DOG_ADD,
+                                    arguments: _formData["id"])
+                              },
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.orange[300],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            GestureDetector(
+                              onTap: () => {
+                                Provider.of<Dogs>(context, listen: false)
+                                    .deleteDog(_formData["id"].toString()),
+                                Navigator.of(context)
+                                    .pushNamed(AppRoutes.DOG_LIST)
+                              },
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.red[300],
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 275,
                       width: 300,
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
-                        child: Image.asset(_formData['photo'].toString(),
-                            height: 180),
+                        child: Icon(
+                          Icons.safety_check,
+                          size: 200,
+                        ),
                       ),
                     ),
                     Card(
@@ -68,17 +103,21 @@ class Dog_Item extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           child: Text(_formData['description'].toString())),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [
-                        Expanded(child: Dog_Item_Attr('Divertido', Icons.pets)),
-                        Expanded(
-                            child: Dog_Item_Attr('Inteligente', Icons.school)),
-                        Expanded(
-                            child: Dog_Item_Attr('Social', Icons.diversity_1)),
-                        Expanded(child: Dog_Item_Attr('Animado', Icons.mood)),
-                      ],
-                    ),
+                    Center(
+                        child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: 100,
+                            child: GridView.builder(
+                                scrollDirection: Axis.horizontal,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 1),
+                                itemCount: inconsData.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Dog_Item_Attr(
+                                      inconsData[index]!.description!,
+                                      inconsData[index]!.icon!);
+                                }))),
                   ]))),
     );
   }

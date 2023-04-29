@@ -24,8 +24,8 @@ class MainApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           routes: {
-            AppRoutes.HOME: (_) => HomePage(),
-            AppRoutes.DOG_LIST: (_) => DogList(),
+            AppRoutes.HOME: (_) => const HomePage(),
+            AppRoutes.DOG_LIST: (_) => const DogList(),
             AppRoutes.DOG_ITEM: (_) => Dog_Item(),
             AppRoutes.DOG_ADD: (_) => AddDog()
           }),
